@@ -1,0 +1,37 @@
+{
+  "name": "apollo-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon --exec babel-node src/index.js",
+    "start": "node dist/index.js",
+    "build": "NODE_ENV=production && rm -rf dist/ & babel src --out-dir dist --copy-files"
+  },
+  "author": "dev@kompa.ai",
+  "license": "ISC",
+  "dependencies": {
+    "@babel/runtime": "^7.6.3",
+    "apollo-server": "^2.11.0",
+    "apollo-server-express": "^2.11.0",
+    "chalk": "^3.0.0",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "graphql": "^14.6.0",
+    "http": "^0.0.0",
+    "mongoose": "^5.9.5",
+    "mongoose-unique-validator": "^2.0.3"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.6.4",
+    "@babel/core": "^7.6.4",
+    "@babel/node": "^7.6.3",
+    "@babel/plugin-transform-async-to-generator": "^7.5.0",
+    "@babel/plugin-transform-runtime": "^7.6.2",
+    "@babel/preset-env": "^7.6.3",
+    "@babel/register": "^7.6.2",
+    "nodemon": "^1.19.4",
+    "rimraf": "^3.0.0"
+  }
+}
