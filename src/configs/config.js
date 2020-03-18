@@ -12,9 +12,12 @@ export default {
   APOLLO_PATH: process.env.APOLLO_PATH,
 
   // # Server Security
-  PORT: process.env.BLOG_BACKEND_PORT,
-  MONGO_URL: process.env.BLOG_MONGO_URL,
+  SERVER_CORS_ENABLED: process.env.SERVER_CORS_ENABLED,
+  SERVER_REQUEST_WHITE_LIST: process.env.SERVER_REQUEST_WHITE_LIST,
 
-  // Eviroment
-  IS_PROD: process.env.NODE_ENV === "production"
+  // Enviroment
+  IS_PROD: process.env.NODE_ENV === "production",
+
+  // MongoDB
+  MONGO_URL: process.env.MONGO_URL
 };

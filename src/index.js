@@ -6,6 +6,8 @@ import bodyParser from "body-parser";
 import logger from "./utils/logger";
 import configs from "./configs/config";
 import typeDefs from "./schema/schema";
+import mongoose from "mongoose";
+import resolvers from "./resolvers/resolvers";
 
 import { ApolloServer, gql } from "apollo-server-express";
 
@@ -21,11 +23,6 @@ const path = configs.APOLLO_PATH || "/graphql";
 
 // Resolvers define the technique for fetching the types defined in the
 // schema. This resolver retrieves books from the "books" array above.
-const resolvers = {
-  Query: {
-    // books: (_, input, ctx) => books
-  }
-};
 
 const server = new ApolloServer({
   typeDefs,
@@ -36,6 +33,17 @@ const server = new ApolloServer({
 });
 
 let app = express();
+
+// Connect MongoDB
+mongoose.connect(configs.MONGO_URL, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+});
+const db = mongoose.connection;
+db.on("open", () => {
+  logger.info("DB connected");
+});
+db.on("error", err => logger.error(err));
 
 // Security cors
 let corsOptions = {

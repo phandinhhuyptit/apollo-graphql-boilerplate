@@ -2,42 +2,53 @@ import { gql } from "apollo-server";
 
 const typeDefs = gql`
   type Query {
-    quakes: [Quake]!
-    quake(id: ID!): Quake
+    books: Books!
+    book(id: ID!): Book!
+    authors: Authors!
+    author(id: ID!): Author!
     # Queries for the current user
     me: User
   }
 
-  type Quake {
-    id: ID
-    magnitude: Float
-    location: String
-    when: String
-    time: String
+  type Book {
+    id: ID!
+    title: String!
+    genre: String!
+    name: String!
+    status: Boolean!
+    authorID: ID
+  }
+
+  type Author {
+    id: ID!
+    name: String!
+    age: Int!
   }
 
   type User {
+    """
+    This is field user
+    """
     id: ID!
     username: String!
     email: String!
     password: String!
-    records: [Quake]
+  }
+
+  type Books {
+    data: [Book]!
+  }
+
+  type Authors {
+    data: [Author]!
   }
 
   type Mutation {
-    # if false, saving record failed -- check errors
-    saveRecord(recordId: ID!, recordWhen: String): RecordUpdateResponse!
-
-    # if false, deleting record failed -- check errors
-    deleteRecord(recordId: ID!): RecordUpdateResponse!
-
+    addBook(title: String!, genre: String!, name: String!): Book!
+    deleteBook(bookId: ID!): Book!
+    addAuthor(name: String!, age: Int!): Author!
+    deleteAuthor(authorId: ID!): Author!
     login(email: String): String # login token
-  }
-
-  type RecordUpdateResponse {
-    success: Boolean!
-    message: String
-    records: [Quake]
   }
 `;
 
