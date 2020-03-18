@@ -56,7 +56,7 @@ export const addAuthor = async args => {
 
 export const updateAuthor = async args => {
   try {
-    const { authorId, title, genre, name, status } = args;
+    const { authorId, name, age } = args;
     const book = await Author.findById(authorId).exec();
     Object.assign(book, { name, age });
     Object.keys(book).forEach(item => {
