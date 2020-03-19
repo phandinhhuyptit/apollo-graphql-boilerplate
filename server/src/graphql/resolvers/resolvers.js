@@ -1,10 +1,10 @@
-import { addBook, getBook, getBooks, updateBook } from "../services/Book";
+import { addBook, getBook, getBooks, updateBook } from "../../services/Book";
 import {
   addAuthor,
   getAuthor,
   getAuthors,
   updateAuthor
-} from "../services/Author";
+} from "../../services/Author";
 
 export default {
   Query: {

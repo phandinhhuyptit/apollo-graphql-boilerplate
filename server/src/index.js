@@ -5,9 +5,9 @@ import express from "express";
 import bodyParser from "body-parser";
 import logger from "./utils/logger";
 import configs from "./configs/config";
-import typeDefs from "./schema/schema";
+import typeDefs from "./graphql/schema/schema";
 import mongoose from "mongoose";
-import resolvers from "./resolvers/resolvers";
+import resolvers from "./graphql/resolvers/resolvers";
 
 import { ApolloServer, gql } from "apollo-server-express";
 
