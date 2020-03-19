@@ -13,6 +13,7 @@ export const getBooks = async args => {
   ]);
 
   const books = resultPromise[0];
+  console.log(books);
   const total = resultPromise[1] ? resultPromise[1].length : 0;
   return books;
 };
@@ -24,7 +25,7 @@ export const getBook = async args => {
 };
 
 export const addBook = async args => {
-  const book = new Book(Object.assign({}, args));
+  const book = new Book(Object.assisgn({}, args));
   await book.save();
   return book;
 };
@@ -38,4 +39,12 @@ export const updateBook = async args => {
   });
   await book.save();
   return book;
+};
+
+export const deleteBook = async args => {
+  const { bookId } = args;
+  const checkIdExist = await Book.findById(bookId).exec();
+  if (!checkIdExist) throw new ServerError("book is not exist in system", 400);
+  await checkIdExist.remove();
+  return checkIdExist;
 };

@@ -16,7 +16,7 @@ const typeDefs = gql`
     genre: String
     name: String
     status: Boolean!
-    authorId: ID
+    author: Author
   }
 
   type Author {
@@ -51,6 +51,7 @@ const typeDefs = gql`
     deleteAuthor(authorId: ID!): Author!
     login(email: String): String # login token
     updateAuthor(authorId: ID!, title: String, age: Int): Author
+    updateBook(BooId: ID!, title: String, genre: String, name: String, status: Boolean) : Book
   }
 `;
 

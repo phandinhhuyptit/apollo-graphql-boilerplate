@@ -1,5 +1,6 @@
 import Author from "../models/Author";
 import logger from "../utils/logger";
+import ServerError from "../utils/serverError";
 
 export const getAuthors = async args => {
   const { name, age } = args;
@@ -23,7 +24,7 @@ export const getAuthor = async args => {
 };
 
 export const addAuthor = async args => {
-  const author = new Author({}, args);
+  const author = new Author(Object.assign({}, args));
   await author.save();
   return author;
 };
@@ -38,4 +39,11 @@ export const updateAuthor = async args => {
   });
   await author.save();
   return author;
+};
+
+export const deleteAuthor = async args => {
+  const { authorId } = args;
+  const checkIdExist = await Author.findById(authorId).exec();
+  if (!checkIdExist) throw new ServerError("book is not exist in system", 400);
+  await checkIdExist.remove();
 };
