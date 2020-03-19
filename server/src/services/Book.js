@@ -46,5 +46,5 @@ export const deleteBook = async args => {
   const checkIdExist = await Book.findById(bookId).exec();
   if (!checkIdExist) throw new ServerError("book is not exist in system", 400);
   await checkIdExist.remove();
-  return checkIdExist;
+  return checkIdExist
 };
