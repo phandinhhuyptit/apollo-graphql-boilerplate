@@ -1,7 +1,7 @@
 import React from "react";
 
 const Book = React.lazy(() => import("../containers/Book"));
-const NotFound = React.lazy(() => import("../containers/"));
+const NotFound = React.lazy(() => import("../containers/NotFound"));
 
 export default [
   {

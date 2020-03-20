@@ -14,19 +14,19 @@ export const GET_BOOKS = gql`
 `;
 
 export const GET_BOOK = gql`
-   query book ($bookId : ID!) {
-       book(bookId : $$bookId){
-        title
-        status
+  query book($bookId: ID!) {
+    book(bookId: $bookId) {
+      title
+      status
+      name
+      genre
+      author {
+        id
+        age
         name
-        genre
-        author {
-          id
-          age
-          name
-        }
-       }
-   }
+      }
+    }
+  }
 `;
 
 export const ADD_BOOK = gql`

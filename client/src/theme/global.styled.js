@@ -1,3 +1,19 @@
+import styled, { createGlobalStyle } from "styled-components";
+
+export const AppWrapper = styled.div`
+  .App {
+    background: ${props => {
+      console.log(props);
+      return props.theme ? props.theme : "#4c2a4c";
+    }};
+    margin: 20px auto;
+    width: 90%;
+    max-width: 700px;
+    color: #eee;
+  }
+`;
+
+export const GlobalStyle = createGlobalStyle`
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
@@ -7,13 +23,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
   background: #553055;
 }
-.App{
-  background: #4c2a4c;
-  margin: 20px auto;
-  width: 90%;
-  max-width: 700px;
-  color: #eee;
-}
+
 .navbar{
   padding: 10px 20px;
   text-align: center;
@@ -73,4 +83,4 @@ input[type='submit']{
   border: 0;
   padding: 6px 20px;
   display: block;
-}
+}`;
