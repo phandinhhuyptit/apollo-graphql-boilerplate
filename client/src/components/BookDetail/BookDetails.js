@@ -1,12 +1,12 @@
 import React, { useContext } from "react";
-import { BookContext } from "../../contexts/BookContext";
+import loGet from "lodash/get";
 
 const BookDetails = ({ book }) => {
-  const { dispatch } = useContext(BookContext);
   return (
-    <li onClick={() => dispatch({ type: "REMOVE_BOOK", id: book.id })}>
+    <li>
       <div className="title">{book.title}</div>
-      <div className="author">{book.author}</div>
+      <div className="author">{loGet(book, ["author", "name"])} </div>
+      {/* <div className="author">{book.author}</div> */}
     </li>
   );
 };

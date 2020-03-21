@@ -14,7 +14,6 @@ const Navbar = () => {
   const { state, dispatch } = useContext(StoreContext);
 
   const changeColorTheme = theme => {
-    console.log(theme);
     dispatch({ type: CHANGE_THEME, theme });
   };
 

@@ -18,11 +18,11 @@ const history = createBrowserHistory();
 
 ReactDOM.render(
   <ApolloProvider client={client}>
-    <StoreProvider>
-      <Router history={history}>
+    <Router history={history}>
+      <StoreProvider>
         <App />
-      </Router>
-    </StoreProvider>
+      </StoreProvider>
+    </Router>
     <GlobalStyle />
   </ApolloProvider>,
   document.getElementById("root")

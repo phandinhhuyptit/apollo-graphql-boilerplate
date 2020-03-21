@@ -3,7 +3,6 @@ import uuid from "uuid/v4";
 export const storeReducer = (state, action) => {
   switch (action.type) {
     case "CHANGE_THEME":
-      console.log(action.theme);
       Object.assign(state, {
         theme: action.theme
       });

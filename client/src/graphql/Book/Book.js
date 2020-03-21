@@ -1,14 +1,16 @@
 import gql from "graphql-tag";
 export const GET_BOOKS = gql`
-  query books {
-    title
-    status
-    name
-    genre
-    author {
-      id
-      age
+  query {
+    books {
+      title
+      status
       name
+      genre
+      author {
+        id
+        age
+        name
+      }
     }
   }
 `;

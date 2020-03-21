@@ -8,8 +8,10 @@ import loGet from "lodash/get";
 
 function App() {
   const { state } = useContext(StoreContext);
+
   return (
     <AppWrapper theme={loGet(state, ["theme"])}>
+      <h2>{loGet(state, ["theme"])}</h2>
       <div className="App">
         <React.Suspense fallback={<div> Loading.... </div>}>
           <Switch>

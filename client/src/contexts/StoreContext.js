@@ -11,9 +11,6 @@ const initialStore = {
 
 const StoreContextProvider = props => {
   const [state, dispatch] = useReducer(storeReducer, initialStore);
-  //   useEffect(() => {
-  //     localStorage.setItem("books", JSON.stringify(books));
-  //   }, [books]);
   return (
     <StoreContext.Provider value={{ state, dispatch }}>
       {props.children}
