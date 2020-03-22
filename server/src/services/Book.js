@@ -25,7 +25,13 @@ export const getBook = async args => {
 };
 
 export const addBook = async args => {
-  const book = new Book(Object.assisgn({}, args));
+  const bookObj = {
+    title: loGet(args, ["title"]),
+    name: loGet(args, ["name"]),
+    genre: loGet(args, ["genre"]),
+    author: loGet(args, ["authorId"])
+  };
+  const book = new Book(bookObj);
   await book.save();
   return book;
 };
@@ -46,5 +52,5 @@ export const deleteBook = async args => {
   const checkIdExist = await Book.findById(bookId).exec();
   if (!checkIdExist) throw new ServerError("book is not exist in system", 400);
   await checkIdExist.remove();
-  return checkIdExist
+  return checkIdExist;
 };
