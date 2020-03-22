@@ -1,6 +1,6 @@
 import React, { useContext, useState, useRef } from "react";
-import { useMutation } from "@apollo/react-hooks";
-import { ADD_BOOK } from "../../graphql/Book/Book";
+import { useQuery, useMutation } from "@apollo/react-hooks";
+import { ADD_BOOK, GET_BOOKS } from "../../graphql/Book/Book";
 import { StoreContext } from "../../contexts/StoreContext";
 import loGet from "lodash/get";
 import { Form, Button, Modal } from "react-bootstrap";
@@ -8,8 +8,8 @@ import { Formik } from "formik";
 import * as Yup from "yup";
 import Spinner from "../Spinner";
 import { BookFormWrapper, ButtonSubmit, MyForm } from "./NewBookForm.styled";
-import { useQuery } from "@apollo/react-hooks";
 import { GET_AUTHORS } from "../../graphql/Author/Author";
+import { ToastContainer, toast } from "react-toastify";
 // import { BookContext } from "../../contexts/BookContext";
 
 // Schema for yup
@@ -28,7 +28,11 @@ const validationSchema = Yup.object().shape({
 });
 
 const NewBookForm = () => {
-  const { loading, error, data } = useQuery(GET_AUTHORS);
+  const { loading, errorAuthor: error, data } = useQuery(GET_AUTHORS);
+  const [
+    addBook,
+    { loadingAddBook: mutationLoading, errorAddBook: mutationError }
+  ] = useMutation(ADD_BOOK);
   const authors = loGet(data, ["authors"]);
   const { state } = useContext(StoreContext);
   const [title, setTitle] = useState("");
@@ -51,7 +55,7 @@ const NewBookForm = () => {
   return (
     <Modal show={true}>
       <Modal.Header closeButton>
-        <Modal.Title>Add Form</Modal.Title>
+        <Modal.Title>Add Book</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         {loading ? (
@@ -60,6 +64,31 @@ const NewBookForm = () => {
           <Formik
             initialValues={{ title: "", name: "", genre: "", author: "" }}
             validationSchema={validationSchema}
+            onSubmit={async (values, { setSubmitting, resetForm }) => {
+              try {
+                const book = {
+                  title: loGet(values, ["title"]),
+                  name: loGet(values, ["name"]),
+                  genre: loGet(values, ["genre"]),
+                  authorId: loGet(values, ["author"])
+                };
+                setSubmitting(true);
+                const result = await addBook({
+                  variables: book,
+                  refetchQueries: () => ["GET_BOOKS"]
+                });
+                toast.success("Success!", {
+                  position: toast.POSITION.TOP_RIGHT
+                });
+                console.log(result);
+                resetForm();
+                setSubmitting(false);
+              } catch (error) {
+                toast.warn(`${error.message}`, {
+                  position: toast.POSITION.TOP_RIGHT
+                });
+              }
+            }}
           >
             {({
               values,
@@ -74,7 +103,7 @@ const NewBookForm = () => {
             }) => {
               return (
                 <BookFormWrapper>
-                  <MyForm className="mx-auto">
+                  <MyForm onSubmit={handleSubmit} className="mx-auto">
                     <Form.Group controlId="formTitle">
                       <Form.Label>Title :</Form.Label>
                       <Form.Control
@@ -176,6 +205,9 @@ const NewBookForm = () => {
           </Formik>
         )}
       </Modal.Body>
+      <Modal.Footer>
+        <Button variant="secondary">Close</Button>
+      </Modal.Footer>
     </Modal>
   );
 };
