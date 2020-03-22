@@ -38,7 +38,7 @@ export const ADD_BOOK = gql`
     $name: String!
     $authorId: ID
   ) {
-    addBook(title: $title, genre: $genre, name: $name, author: authorId) {
+    addBook(title: $title, genre: $genre, name: $name, authorId: $authorId) {
       id
     }
   }

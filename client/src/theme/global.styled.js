@@ -1,5 +1,6 @@
 import styled, { createGlobalStyle } from "styled-components";
 import "bootstrap/dist/css/bootstrap.min.css";
+import "react-toastify/dist/ReactToastify.css";
 
 export const AppWrapper = styled.div`
   .App {
