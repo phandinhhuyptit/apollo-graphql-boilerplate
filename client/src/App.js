@@ -2,11 +2,16 @@ import React, { useContext } from "react";
 import { Switch, Route } from "react-router-dom";
 import Routes from "./router/router";
 import { StoreContext } from "./contexts/StoreContext";
-
+import { toast } from "react-toastify";
 import { AppWrapper } from "./theme/global.styled";
 import loGet from "lodash/get";
 
 function App() {
+  toast.configure({
+    autoClose: 2000,
+    draggable: false
+    //etc you get the idea
+  });
   const { state } = useContext(StoreContext);
 
   return (
