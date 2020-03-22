@@ -1,4 +1,5 @@
 import styled, { createGlobalStyle } from "styled-components";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 export const AppWrapper = styled.div`
   .App {
@@ -73,8 +74,7 @@ input[type='text']{
   padding: 10px;
   box-sizing: border-box;
   margin: 6px 0;
-  background: #3c1f3c;
-  color: #fff;
+
   border: 0;
 }
 input[type='submit']{

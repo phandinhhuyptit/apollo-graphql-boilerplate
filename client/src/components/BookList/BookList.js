@@ -9,7 +9,6 @@ import { GET_BOOKS } from "../../graphql/Book/Book";
 const BookList = () => {
   const { loading, error, data } = useQuery(GET_BOOKS);
   const books = loGet(data, ["books"], []);
-  console.log(books);
 
   if (loading) return "Loading...";
   if (error) return `Error! ${error.message}`;

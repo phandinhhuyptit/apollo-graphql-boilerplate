@@ -6,7 +6,6 @@ const BookDetails = ({ book }) => {
     <li>
       <div className="title">{book.title}</div>
       <div className="author">{loGet(book, ["author", "name"])} </div>
-      {/* <div className="author">{book.author}</div> */}
     </li>
   );
 };
