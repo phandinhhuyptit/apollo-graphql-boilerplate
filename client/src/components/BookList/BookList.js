@@ -1,22 +1,44 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useRef } from "react";
 import BookDetails from "../BookDetail";
 import { BookContext } from "../../contexts/BookContext";
 import { StoreContext } from "../../contexts/StoreContext";
-import { useQuery } from "@apollo/react-hooks";
+import { useQuery, useMutation } from "@apollo/react-hooks";
 import loGet from "lodash/get";
-import { GET_BOOKS } from "../../graphql/Book/Book";
+import { GET_BOOKS, DELETE_BOOK } from "../../graphql/Book/Book";
 import { Button } from "react-bootstrap";
 import { BookListWrapper } from "./BookList.styled";
+import { toast } from "react-toastify";
 import { OPEN_MODAL } from "../../utils/constants/book/book";
 
 const BookList = () => {
   const { state, dispatch } = useContext(BookContext);
   const [isModal, setIsModal] = useState(false);
   const { loading, error, data } = useQuery(GET_BOOKS);
+  const [
+    deleteBook,
+    { loadingAddBook: mutationLoading, errorAddBook: mutationError }
+  ] = useMutation(DELETE_BOOK);
   const books = loGet(data, ["books"], []);
+  const BookDetailRef = useRef();
 
   const openModal = () => {
     dispatch({ type: OPEN_MODAL });
+  };
+
+  const handleDeleteBook = async id => {
+    try {
+      const result = await deleteBook({
+        variables: { bookId: id },
+        refetchQueries: () => ["GET_BOOKS"]
+      });
+      toast.success("Success!", {
+        position: toast.POSITION.TOP_RIGHT
+      });
+    } catch (errors) {
+      toast.warn(`${loGet(errors, [0, "message"])}`, {
+        position: toast.POSITION.TOP_RIGHT
+      });
+    }
   };
 
   if (loading) return "Loading...";
@@ -26,7 +48,14 @@ const BookList = () => {
       <div className="book-list">
         <ul>
           {books.map(book => {
-            return <BookDetails book={book} key={book.id} />;
+            return (
+              <BookDetails
+                handleDeleteBook={handleDeleteBook}
+                ref={BookDetailRef}
+                book={book}
+                key={book.id}
+              />
+            );
           })}
         </ul>
         <div className="button-wrapper">
@@ -34,7 +63,16 @@ const BookList = () => {
             {" "}
             Add Book{" "}
           </Button>
-          <div> {JSON.stringify(state.isModal)} </div>
+          <Button
+            className="ml-1"
+            variant="primary"
+            onClick={() => {
+              BookDetailRef.current.testBook();
+            }}
+          >
+            {" "}
+            Test{" "}
+          </Button>
         </div>
       </div>
     </BookListWrapper>
