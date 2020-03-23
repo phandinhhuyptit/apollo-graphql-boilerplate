@@ -3,10 +3,7 @@ import { bookReducer } from "../reducers/bookReducer";
 
 export const BookContext = createContext();
 
-const initialStore = {
-  isModal: false
-};
-
+const initialStore = false;
 const BookContextProvider = props => {
   const [state, dispatch] = useReducer(bookReducer, initialStore);
   return (

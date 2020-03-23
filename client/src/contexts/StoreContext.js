@@ -1,5 +1,5 @@
 import React, { createContext, useReducer, useEffect } from "react";
-import { bookReducer } from "../reducers/bookReducer";
+import { storeReducer } from "../reducers/storeReducer";
 
 export const StoreContext = createContext();
 
@@ -10,7 +10,7 @@ const initialStore = {
 };
 
 const StoreContextProvider = props => {
-  const [state, dispatch] = useReducer(bookReducer, initialStore);
+  const [state, dispatch] = useReducer(storeReducer, initialStore);
   return (
     <StoreContext.Provider value={{ state, dispatch }}>
       {props.children}
