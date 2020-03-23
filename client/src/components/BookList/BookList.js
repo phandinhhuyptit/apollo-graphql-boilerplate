@@ -17,7 +17,6 @@ const BookList = () => {
 
   const openModal = () => {
     dispatch({ type: OPEN_MODAL });
-    setIsModal(true);
   };
 
   if (loading) return "Loading...";

@@ -11,6 +11,7 @@ import { BookContext } from "../../contexts/BookContext";
 import { BookFormWrapper, ButtonSubmit, MyForm } from "./NewBookForm.styled";
 import { GET_AUTHORS } from "../../graphql/Author/Author";
 import { ToastContainer, toast } from "react-toastify";
+import { COLSE_MODAL } from "../../utils/constants/book/book";
 
 // import { BookContext } from "../../contexts/BookContext";
 
@@ -30,7 +31,7 @@ const validationSchema = Yup.object().shape({
 });
 
 const NewBookForm = () => {
-  const { state } = useContext(BookContext);
+  const { state, dispatch } = useContext(BookContext);
   const { loading, errorAuthor: error, data } = useQuery(GET_AUTHORS);
   const [
     addBook,
@@ -53,9 +54,12 @@ const NewBookForm = () => {
     setTitle("");
     setAuthor("");
   };
+  const closeModal = () => {
+    dispatch({ type: COLSE_MODAL });
+  };
 
   return (
-    <Modal show={loGet(state, ["isModal"])}>
+    <Modal show={loGet(state, ["isModal"])} onHide={closeModal}>
       <Modal.Header closeButton>
         <Modal.Title>Add Book</Modal.Title>
       </Modal.Header>
@@ -207,9 +211,6 @@ const NewBookForm = () => {
           </Formik>
         )}
       </Modal.Body>
-      <Modal.Footer>
-        <Button variant="secondary">Close</Button>
-      </Modal.Footer>
     </Modal>
   );
 };

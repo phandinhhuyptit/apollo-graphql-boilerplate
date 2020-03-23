@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import Navbar from "../../components/Navbar";
 import BookList from "../../components/BookList";
 import NewBookForm from "../../components/NewBookForm";
-import BookContextProvider from "../../contexts/BookContext";
+import BookContextProvider, { BookContext } from "../../contexts/BookContext";
 
 const Book = props => {
   return (
