@@ -5,7 +5,7 @@ export const bookReducer = (state, action) => {
       state = newState;
       return state;
     case "CLOSE_MODAL":
-      const newState2 = Object.assign({}, { isModal: true });
+      const newState2 = Object.assign({}, { isModal: false });
       state = newState2;
       return state;
     default:
