@@ -44,9 +44,13 @@ const typeDefs = gql`
     data: [Author]!
   }
 
+  type RecordDeleteResponse {
+    message: String!
+  }
+
   type Mutation {
     addBook(title: String!, genre: String!, name: String!, authorId: ID): Book!
-    deleteBook(bookId: ID!): Book!
+    deleteBook(bookId: ID!): RecordDeleteResponse!
     addAuthor(name: String!, age: Int!, bookId: [ID]): Author!
     deleteAuthor(authorId: ID!): Author!
     login(email: String): String # login token

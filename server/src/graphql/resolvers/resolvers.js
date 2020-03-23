@@ -1,4 +1,10 @@
-import { addBook, getBook, getBooks, updateBook } from "../../services/Book";
+import {
+  addBook,
+  getBook,
+  getBooks,
+  updateBook,
+  deleteBook
+} from "../../services/Book";
 import {
   addAuthor,
   getAuthor,
@@ -18,5 +24,6 @@ export default {
     addAuthor: (_, args) => addAuthor({ ...args }),
     updateAuthor: (_, args) => updateAuthor({ ...args }),
     updateBook: (_, args) => updateBook({ ...args }),
+    deleteBook: (_, args) => deleteBook({ ...args })
   }
 };
