@@ -1,16 +1,14 @@
-import uuid from 'uuid/v4';
-
 export const bookReducer = (state, action) => {
   switch (action.type) {
-    case 'ADD_BOOK':
-      return [...state, {
-        title: action.book.title, 
-        author: action.book.author, 
-        id: uuid()}
-      ]
-    case 'REMOVE_BOOK':
-      return state.filter(book => book.id !== action.id);
+    case "OPEN_MODAL":
+      const newState = Object.assign({}, { isModal: true });
+      state = newState;
+      return state;
+    case "CLOSE_MODAL":
+      const newState2 = Object.assign({}, { isModal: false });
+      state = newState2;
+      return state;
     default:
       return state;
   }
-} 
+};

@@ -3,16 +3,11 @@ import { bookReducer } from "../reducers/bookReducer";
 
 export const BookContext = createContext();
 
+const initialStore = false;
 const BookContextProvider = props => {
-  const [books, dispatch] = useReducer(bookReducer, [], () => {
-    const localData = localStorage.getItem("books");
-    return localData ? JSON.parse(localData) : [];
-  });
-  useEffect(() => {
-    localStorage.setItem("books", JSON.stringify(books));
-  }, [books]);
+  const [state, dispatch] = useReducer(bookReducer, initialStore);
   return (
-    <BookContext.Provider value={{ books, dispatch }}>
+    <BookContext.Provider value={{ state, dispatch }}>
       {props.children}
     </BookContext.Provider>
   );
