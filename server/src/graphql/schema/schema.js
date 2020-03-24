@@ -1,15 +1,6 @@
 import { gql } from "apollo-server";
 
 const typeDefs = gql`
-  type Query {
-    books: [Book!]
-    book(bookId: ID!): Book!
-    authors: [Author!]
-    author(authorId: ID!): Author!
-    # Queries for the current user
-    me: User
-  }
-
   type Book {
     id: ID!
     title: String
@@ -48,6 +39,15 @@ const typeDefs = gql`
     message: String!
   }
 
+  type Query {
+    books: [Book!]
+    book(bookId: ID!): Book!
+    authors: [Author!]
+    author(authorId: ID!): Author!
+    # Queries for the current user
+    me: User
+  }
+
   type Mutation {
     addBook(title: String!, genre: String!, name: String!, authorId: ID): Book!
     deleteBook(bookId: ID!): RecordDeleteResponse!
@@ -62,6 +62,10 @@ const typeDefs = gql`
       name: String
       status: Boolean
     ): Book
+  }
+
+  type Subscription {
+    listBooks: [Book!]
   }
 `;
 
