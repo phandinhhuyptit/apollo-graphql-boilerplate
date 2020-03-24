@@ -8,7 +8,7 @@ import configs from "./configs/config";
 import typeDefs from "./graphql/schema/schema";
 import mongoose from "mongoose";
 import resolvers from "./graphql/resolvers/resolvers";
-
+import { SubscriptionServer } from "subscriptions-transport-ws";
 import { ApolloServer, gql } from "apollo-server-express";
 
 const PORT = parseInt(configs.PORT, 10) || 9005;
