@@ -1,5 +1,5 @@
 require("dotenv").config();
-import http from "http";
+import { createServer } from "http";
 import cors from "cors";
 import express from "express";
 import bodyParser from "body-parser";
@@ -8,8 +8,9 @@ import configs from "./configs/config";
 import typeDefs from "./graphql/schema/schema";
 import mongoose from "mongoose";
 import resolvers from "./graphql/resolvers/resolvers";
-
+import { SubscriptionServer } from "subscriptions-transport-ws";
 import { ApolloServer, gql } from "apollo-server-express";
+import { PubSub } from "apollo-server";
 
 const PORT = parseInt(configs.PORT, 10) || 9005;
 const playground = (configs.APOLLO_PLAYGROUND === "true" && true) || false;
@@ -24,12 +25,15 @@ const path = configs.APOLLO_PATH || "/graphql";
 // Resolvers define the technique for fetching the types defined in the
 // schema. This resolver retrieves books from the "books" array above.
 
+const pubsub = new PubSub();
+
 const server = new ApolloServer({
   typeDefs,
   resolvers,
   introspection,
   playground,
-  debug
+  debug,
+  context: ({ req, res }) => ({ req, res, pubsub })
 });
 
 let app = express();
@@ -73,9 +77,17 @@ app.use((err, req, res, next) => {
 
 server.applyMiddleware({ app, path, cors: false });
 
+// create HTTP server
+const httpServer = createServer(app);
+
+server.installSubscriptionHandlers(httpServer);
+
 // The `listen` method launches a web server.
-app.listen(PORT, () => {
-  logger.info(`🚀  Server ready at ${PORT}`);
+httpServer.listen(PORT, () => {
+  logger.info(`server ready at http://localhost:${PORT}${server.graphqlPath}`);
+  logger.info(
+    `Subscriptions ready at ws://localhost:${PORT}${server.subscriptionsPath}`
+  );
 });
 
 // keep server running

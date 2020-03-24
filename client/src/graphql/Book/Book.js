@@ -2,6 +2,7 @@ import gql from "graphql-tag";
 export const GET_BOOKS = gql`
   query {
     books {
+      id
       title
       status
       name
@@ -40,6 +41,14 @@ export const ADD_BOOK = gql`
   ) {
     addBook(title: $title, genre: $genre, name: $name, authorId: $authorId) {
       id
+    }
+  }
+`;
+
+export const DELETE_BOOK = gql`
+  mutation deleteBook($bookId: ID!) {
+    deleteBook(bookId: $bookId) {
+      message
     }
   }
 `;
