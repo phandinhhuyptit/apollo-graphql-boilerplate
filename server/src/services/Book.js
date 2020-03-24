@@ -1,8 +1,9 @@
 import Book from "../models/Book";
 import logger from "../utils/logger";
 import loGet from "lodash/get";
+import { LIST_BOOKS } from "../utils/constant";
 
-export const getBooks = async args => {
+export const getBooks = async (args, pubsub) => {
   const { title, genre, name, status } = args;
   const objQuery = {};
   const resultPromise = await Promise.all([
@@ -13,7 +14,11 @@ export const getBooks = async args => {
   ]);
 
   const books = resultPromise[0];
-  console.log(books);
+
+  pubsub.publish(LIST_BOOKS, {
+    listBooks: books
+  });
+
   const total = resultPromise[1] ? resultPromise[1].length : 0;
   return books;
 };

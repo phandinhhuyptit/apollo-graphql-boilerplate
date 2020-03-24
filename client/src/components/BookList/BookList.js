@@ -77,7 +77,25 @@ const BookList = () => {
       </div>
     </BookListWrapper>
   ) : (
-    <div className="empty">No books to read. Hello free time :).</div>
+    <>
+      <div className="empty">No books to read. Hello free time :).</div>
+      <div className="button-wrapper">
+        <Button onClick={() => openModal()} variant="primary">
+          {" "}
+          Add Book{" "}
+        </Button>
+        <Button
+          className="ml-1"
+          variant="primary"
+          onClick={() => {
+            BookDetailRef.current.testBook();
+          }}
+        >
+          {" "}
+          Test{" "}
+        </Button>
+      </div>
+    </>
   );
 };
 
