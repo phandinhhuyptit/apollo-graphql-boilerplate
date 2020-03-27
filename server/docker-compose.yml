@@ -1,0 +1,35 @@
+version: "3.3"
+services:
+  db:
+    image: mongo
+    ports:
+      - 27017:27017
+    restart: always
+    volumes:
+      - /root/backend-backup/data:/data
+      - /root/backend-backup/backups:/backups
+    container_name: mongo-db
+
+  redis:
+    image: redis
+    ports:
+      - 6377:6379
+    restart: always
+    container_name: redis
+
+  backendContainer:
+    image: backend-image
+    volumes:
+      - /root/backend-backup/data-source/public:/public
+      - /root/backend-backup/data-source/uploads:/uploads
+      - /root/backend-backup/data-source/temp_assets:/temp_assets
+      - /root/backend-backup/data-source/cron_logs.txt:/cron_logs.txt
+      - /root/backend-backup/data-source/cron_logs_update_sender_conversation.txt:/cron_logs_update_sender_conversation.txt
+    restart: always
+    ports:
+      - 3000:3000
+    container_name: BackendContainer
+    environment:
+      ENV: production
+      PORT: 3000
+      TZ: "Asia/Bangkok"
