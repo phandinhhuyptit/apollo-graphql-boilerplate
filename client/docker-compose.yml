@@ -1,0 +1,8 @@
+version: "3.3"
+services:
+  wevaMerchantWebContainer:
+    image: web-image
+    restart: always
+    ports:
+      - 3002:3002
+    container_name: webContainer
