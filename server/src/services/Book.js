@@ -1,9 +1,9 @@
 import Book from "../models/Book";
 import logger from "../utils/logger";
 import loGet from "lodash/get";
-import { LIST_BOOKS } from "../utils/constant";
+import { LIST_BOOKS, NEW_BOOK  } from "../utils/constant";
 
-export const getBooks = async (args, pubsub) => {
+export const getBooks = async (args) => {
   const { title, genre, name, status } = args;
   const objQuery = {};
   const resultPromise = await Promise.all([
@@ -15,9 +15,9 @@ export const getBooks = async (args, pubsub) => {
 
   const books = resultPromise[0];
 
-  pubsub.publish(LIST_BOOKS, {
-    listBooks: books
-  });
+  // pubsub.publish(LIST_BOOKS, {
+  //   listBooks: books
+  // });
 
   const total = resultPromise[1] ? resultPromise[1].length : 0;
   return books;
@@ -29,14 +29,19 @@ export const getBook = async args => {
   return book;
 };
 
-export const addBook = async args => {
+export const addBook = async (args,pubsub) => {
   const bookObj = {
     title: loGet(args, ["title"]),
     name: loGet(args, ["name"]),
     genre: loGet(args, ["genre"]),
     author: loGet(args, ["authorId"])
   };
+  
   const book = new Book(bookObj);
+  const bookJson = book.toJSON()
+  await pubsub.publish(NEW_BOOK,{
+    autoAddBook : {...bookJson , id : bookJson._id}
+  })
   await book.save();
   return book;
 };

@@ -19,5 +19,10 @@ export default {
   IS_PROD: process.env.NODE_ENV === "production",
 
   // MongoDB
-  MONGO_URL: process.env.MONGO_URL
+  MONGO_URL: process.env.MONGO_URL,
+
+  // Redis
+  REDIS_DEFAULT_HOST: process.env.REDIS_DEFAULT_HOST,
+  REDIS_DEFAULT_PORT: process.env.REDIS_DEFAULT_PORT,
+  REDIS_DEFAULT_DB_NAME: process.env.REDIS_DEFAULT_DB_NAME,
 };
