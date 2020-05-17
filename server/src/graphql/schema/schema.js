@@ -17,6 +17,16 @@ const typeDefs = gql`
     books: [Book!]
   }
 
+  type realtimeBook {
+    id: ID!
+    title: String
+    genre: String
+    name: String
+    status: Boolean!
+    author: String
+  }
+
+
   type User {
     """
     This is field user
@@ -66,6 +76,7 @@ const typeDefs = gql`
 
   type Subscription {
     listBooks: [Book!]
+    autoAddBook : Book!
   }
 `;
 
