@@ -1,25 +1,37 @@
-import React, { useContext, useState, useRef } from "react";
+import React, { useContext, useState, useRef, useEffect } from "react";
 import BookDetails from "../BookDetail";
 import { BookContext } from "../../contexts/BookContext";
 import { StoreContext } from "../../contexts/StoreContext";
 import { useQuery, useMutation } from "@apollo/react-hooks";
 import loGet from "lodash/get";
-import { GET_BOOKS, DELETE_BOOK } from "../../graphql/Book/Book";
+import { GET_BOOKS, DELETE_BOOK, SUBSCRIPTIONS_ADD_BOOK } from "../../graphql/Book/Book";
 import { Button } from "react-bootstrap";
 import { BookListWrapper } from "./BookList.styled";
 import { toast } from "react-toastify";
 import { OPEN_MODAL } from "../../utils/constants/book/book";
 
+ 
 const BookList = () => {
   const { state, dispatch } = useContext(BookContext);
   const [isModal, setIsModal] = useState(false);
-  const { loading, error, data } = useQuery(GET_BOOKS);
+  const { subscribeToMore,loading, error, data } = useQuery(GET_BOOKS);
   const [
     deleteBook,
     { loadingAddBook: mutationLoading, errorAddBook: mutationError }
   ] = useMutation(DELETE_BOOK);
   const books = loGet(data, ["books"], []);
   const BookDetailRef = useRef();
+
+
+  useEffect(()=>{
+    subscribeToMore({
+        document : SUBSCRIPTIONS_ADD_BOOK,
+        fetchPolicy: "no-cache",
+        updateQuery: (prev, { subscriptionData }) => {
+          console.log(subscriptionData)
+      }
+    })               
+  },[])
 
   const openModal = () => {
     dispatch({ type: OPEN_MODAL });

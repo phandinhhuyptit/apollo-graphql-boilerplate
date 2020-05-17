@@ -41,6 +41,10 @@ export const ADD_BOOK = gql`
   ) {
     addBook(title: $title, genre: $genre, name: $name, authorId: $authorId) {
       id
+      title
+      genre
+      name
+      status
     }
   }
 `;
@@ -52,3 +56,42 @@ export const DELETE_BOOK = gql`
     }
   }
 `;
+
+
+export const SUBSCRIPTIONS_ADD_BOOK = gql`
+  subscription {
+    autoAddBook {
+      title
+      genre
+      name
+      status
+      author
+    }
+}
+`;
+
+export const SUBSCRIPTIONS_REMOVE_BOOK = gql`
+  subscription {
+    autoRemoveBook {
+      id
+      title
+      genre
+      name
+      status
+      author
+    }
+}
+`;
+
+export const SUBSCRIPTIONS_UPDATE_BOOK = gql`
+  subscription {
+    autoUpdateBook {
+      id
+      title
+      genre
+      name
+      status
+    }
+}
+`;
+
