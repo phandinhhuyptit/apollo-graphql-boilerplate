@@ -1,19 +1,19 @@
 import gql from "graphql-tag";
 export const GET_BOOKS = gql`
-  query {
-    books {
+query {
+  books {
+    id
+    title
+    status
+    name
+    genre
+    author {
       id
-      title
-      status
+      age
       name
-      genre
-      author {
-        id
-        age
-        name
-      }
     }
   }
+}
 `;
 
 export const GET_BOOK = gql`
@@ -59,19 +59,19 @@ export const DELETE_BOOK = gql`
 
 
 export const SUBSCRIPTIONS_ADD_BOOK = gql`
-  subscription {
-    autoAddBook {
-      title
-      genre
-      name
-      status
-      author
-    }
+subscription autoAddBook{
+  autoAddBook {
+    title
+    genre
+    name
+    status
+    author
+  }
 }
 `;
 
 export const SUBSCRIPTIONS_REMOVE_BOOK = gql`
-  subscription {
+  subscription autoRemoveBook {
     autoRemoveBook {
       id
       title
@@ -84,7 +84,7 @@ export const SUBSCRIPTIONS_REMOVE_BOOK = gql`
 `;
 
 export const SUBSCRIPTIONS_UPDATE_BOOK = gql`
-  subscription {
+  subscription autoUpdateBook {
     autoUpdateBook {
       id
       title
