@@ -13,14 +13,22 @@ import { OPEN_MODAL } from "../../utils/constants/book/book";
  
 const BookList = () => {
   const { state, dispatch } = useContext(BookContext);
-  const [isModal, setIsModal] = useState(false);
-  const { subscribeToMore,loading, error, data } = useQuery(GET_BOOKS);
   const [
     deleteBook,
     { loadingAddBook: mutationLoading, errorAddBook: mutationError }
   ] = useMutation(DELETE_BOOK);
+  const { subscribeToMore,loading, error, data } = useQuery(GET_BOOKS);
   const books = loGet(data, ["books"], []);
+  const [isModal, setIsModal] = useState(false);
+  const [listData, setListData] = useState([]);
   const BookDetailRef = useRef();
+
+
+  useEffect(()=>{
+   if(books && books.length > 0) {    
+    setListData(books)
+   }             
+  },[books])
 
 
   useEffect(()=>{
@@ -29,6 +37,9 @@ const BookList = () => {
         fetchPolicy: "no-cache",
         updateQuery: (prev, { subscriptionData }) => {
           console.log(subscriptionData)
+          //  if(!subscriptionData.data) {
+          //     const newListData = [...listData,subscriptionData.data]
+          //  }
       }
     })               
   },[])
@@ -55,11 +66,11 @@ const BookList = () => {
 
   if (loading) return "Loading...";
   if (error) return `Error! ${error.message}`;
-  return books.length ? (
+  return listData.length > 0 ? (
     <BookListWrapper>
       <div className="book-list">
         <ul>
-          {books.map(book => {
+          {listData.map(book => {
             return (
               <BookDetails
                 handleDeleteBook={handleDeleteBook}
