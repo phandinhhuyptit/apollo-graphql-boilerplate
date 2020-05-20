@@ -1,7 +1,7 @@
 import Book from "../models/Book";
 import logger from "../utils/logger";
 import loGet from "lodash/get";
-import { LIST_BOOKS, NEW_BOOK  } from "../utils/constant";
+import { LIST_BOOKS, NEW_BOOK, REMOVE_BOOK  } from "../utils/constant";
 
 export const getBooks = async (args) => {
   const { title, genre, name, status } = args;
@@ -57,12 +57,19 @@ export const updateBook = async args => {
   return book;
 };
 
-export const deleteBook = async args => {
+export const deleteBook = async (args,pubsub) => {
   const { bookId } = args;
   const checkIdExist = await Book.findById(bookId).exec();
   if (!checkIdExist) throw new ServerError("book is not exist in system", 400);
   await checkIdExist.remove();
+  await pubsub.publish(REMOVE_BOOK,{
+    autoRemoveBook : {
+      id: bookId,
+      message: "Success"
+    }
+  })
   return {
+    id: bookId,
     message: "Success"
   };
 };

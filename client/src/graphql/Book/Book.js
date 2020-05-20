@@ -65,7 +65,6 @@ subscription autoAddBook{
     genre
     name
     status
-    author
   }
 }
 `;
@@ -73,12 +72,7 @@ subscription autoAddBook{
 export const SUBSCRIPTIONS_REMOVE_BOOK = gql`
   subscription autoRemoveBook {
     autoRemoveBook {
-      id
-      title
-      genre
-      name
-      status
-      author
+    id
     }
 }
 `;

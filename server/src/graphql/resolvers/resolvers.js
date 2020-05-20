@@ -11,7 +11,7 @@ import {
   getAuthors,
   updateAuthor
 } from "../../services/Author";
-import { LIST_BOOKS , NEW_BOOK } from "../../utils/constant";
+import { LIST_BOOKS , NEW_BOOK ,REMOVE_BOOK } from "../../utils/constant";
 
 export default {
   Query: {
@@ -25,14 +25,14 @@ export default {
     addAuthor: (_, args) => addAuthor({ ...args }),
     updateAuthor: (_, args) => updateAuthor({ ...args }),
     updateBook: (_, args) => updateBook({ ...args }),
-    deleteBook: (_, args) => deleteBook({ ...args })
+    deleteBook: (_, args,{ pubsub }) => deleteBook({ ...args },pubsub)
   },
   Subscription: {
-    // listBooks: {
-    //   subscribe: (_, __, { pubsub }) => pubsub.asyncIterator(LIST_BOOKS)
-    // }
     autoAddBook: {
       subscribe: (_, __, { pubsub }) => pubsub.asyncIterator(NEW_BOOK)
+    },
+    autoRemoveBook: {
+      subscribe: (_, __, { pubsub }) => pubsub.asyncIterator(REMOVE_BOOK)
     }
   }
 };

@@ -4,7 +4,7 @@ import { BookContext } from "../../contexts/BookContext";
 import { StoreContext } from "../../contexts/StoreContext";
 import { useQuery, useMutation } from "@apollo/react-hooks";
 import loGet from "lodash/get";
-import { GET_BOOKS, DELETE_BOOK, SUBSCRIPTIONS_ADD_BOOK } from "../../graphql/Book/Book";
+import { GET_BOOKS, DELETE_BOOK, SUBSCRIPTIONS_ADD_BOOK, SUBSCRIPTIONS_REMOVE_BOOK } from "../../graphql/Book/Book";
 import { Button } from "react-bootstrap";
 import { BookListWrapper } from "./BookList.styled";
 import { toast } from "react-toastify";
@@ -31,18 +31,34 @@ const BookList = () => {
   },[books])
 
 
-  useEffect(()=>{
+  useEffect(()=> {
     subscribeToMore({
         document : SUBSCRIPTIONS_ADD_BOOK,
         fetchPolicy: "no-cache",
         updateQuery: (prev, { subscriptionData }) => {
-          console.log(subscriptionData)
-          //  if(!subscriptionData.data) {
-          //     const newListData = [...listData,subscriptionData.data]
-          //  }
+           if(!subscriptionData.data) return prev
+              return Object.assign({}, prev, {
+                books: [subscriptionData.data.autoAddBook,...loGet(prev,["books"])]
+              });
       }
-    })               
-  },[])
+    })  
+    console.log(listData)  
+  })
+
+  useEffect(()=> {
+    subscribeToMore({
+      document : SUBSCRIPTIONS_REMOVE_BOOK,
+      fetchPolicy: "no-cache",
+      updateQuery: (prev, { subscriptionData }) => {
+        if(!subscriptionData.data) return prev
+            const id = subscriptionData.data.autoRemoveBook.id
+            // const newListData = loGet(prev,["books"]).filter(book => book.id !== id )
+            test()
+            // setListData(newListData)
+      }
+    })  
+  })
+
 
   const openModal = () => {
     dispatch({ type: OPEN_MODAL });
@@ -66,11 +82,11 @@ const BookList = () => {
 
   if (loading) return "Loading...";
   if (error) return `Error! ${error.message}`;
-  return listData.length > 0 ? (
+  return books.length > 0 ? (
     <BookListWrapper>
       <div className="book-list">
         <ul>
-          {listData.map(book => {
+          {books.map(book => {
             return (
               <BookDetails
                 handleDeleteBook={handleDeleteBook}

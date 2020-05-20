@@ -46,8 +46,10 @@ const typeDefs = gql`
   }
 
   type RecordDeleteResponse {
-    message: String!
+    id: String!
+    message: String
   }
+  
 
   type Query {
     books: [Book!]
@@ -77,6 +79,7 @@ const typeDefs = gql`
   type Subscription {
     listBooks: [Book!]
     autoAddBook : Book!
+    autoRemoveBook : RecordDeleteResponse!
   }
 `;
 
