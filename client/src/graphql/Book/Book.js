@@ -8,7 +8,6 @@ query {
     name
     genre
     author {
-      id
       age
       name
     }
@@ -61,10 +60,15 @@ export const DELETE_BOOK = gql`
 export const SUBSCRIPTIONS_ADD_BOOK = gql`
 subscription autoAddBook{
   autoAddBook {
+    id
     title
     genre
     name
     status
+    author {
+      age
+      name
+    } 
   }
 }
 `;

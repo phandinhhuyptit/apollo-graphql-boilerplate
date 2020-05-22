@@ -18,32 +18,43 @@ const BookList = () => {
     { loadingAddBook: mutationLoading, errorAddBook: mutationError }
   ] = useMutation(DELETE_BOOK);
   const { subscribeToMore,loading, error, data } = useQuery(GET_BOOKS);
-  const books = loGet(data, ["books"], []);
+
   const [isModal, setIsModal] = useState(false);
   const [listData, setListData] = useState([]);
   const BookDetailRef = useRef();
 
-
   useEffect(()=>{
-   if(books && books.length > 0) {    
-    setListData(books)
-   }             
-  },[books])
+   if(data && data.books.length > 0) {    
+    setListData(data.books)
+   }     
+   console.log("Hello")        
+  },[data])
 
 
-  useEffect(()=> {
+  useEffect(() => {
     subscribeToMore({
-        document : SUBSCRIPTIONS_ADD_BOOK,
-        fetchPolicy: "no-cache",
-        updateQuery: (prev, { subscriptionData }) => {
-           if(!subscriptionData.data) return prev
-              return Object.assign({}, prev, {
-                books: [subscriptionData.data.autoAddBook,...loGet(prev,["books"])]
-              });
-      }
-    })  
-    console.log(listData)  
-  })
+      document: SUBSCRIPTIONS_ADD_BOOK,
+      fetchPolicy: "no-cache",
+      updateQuery: (prev, { subscriptionData }) => {
+        console.log(subscriptionData);
+        if (!subscriptionData.data) return prev;
+        if (
+          loGet(prev, ["books"], []).some(
+            (book) => book.id === subscriptionData.data.autoAddBook.id
+          )
+        ) {
+          return prev;
+        }
+        const books = [
+          subscriptionData.data.autoAddBook,
+          ...loGet(prev, ["books"]),
+        ];
+        return {
+          books: books,
+        };
+      },
+    });
+  });
 
   useEffect(()=> {
     subscribeToMore({
@@ -53,7 +64,6 @@ const BookList = () => {
         if(!subscriptionData.data) return prev
             const id = subscriptionData.data.autoRemoveBook.id
             // const newListData = loGet(prev,["books"]).filter(book => book.id !== id )
-            test()
             // setListData(newListData)
       }
     })  
@@ -82,11 +92,11 @@ const BookList = () => {
 
   if (loading) return "Loading...";
   if (error) return `Error! ${error.message}`;
-  return books.length > 0 ? (
+  return listData.length > 0 ? (
     <BookListWrapper>
       <div className="book-list">
         <ul>
-          {books.map(book => {
+          {listData.map(book => {
             return (
               <BookDetails
                 handleDeleteBook={handleDeleteBook}
