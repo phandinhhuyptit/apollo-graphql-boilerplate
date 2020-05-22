@@ -38,12 +38,15 @@ export const addBook = async (args,pubsub) => {
   };
   
   const book = new Book(bookObj);
-  const bookJson = book.toJSON()
+  await book.save(); 
+  const newBook = await Book.findById(book._id).populate("author") 
+  const Test = newBook.toJSON()
+  Object.assign(Test,{id : book._id})
   await pubsub.publish(NEW_BOOK,{
-    autoAddBook : {...bookJson , id : bookJson._id}
-  })
-  await book.save();
-  return book;
+  autoAddBook : Test,
+  })  
+  return book
+
 };
 
 export const updateBook = async args => {
