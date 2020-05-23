@@ -26,8 +26,7 @@ const BookList = () => {
   useEffect(()=>{
    if(data && data.books.length > 0) {    
     setListData(data.books)
-   }     
-   console.log("Hello")        
+   }             
   },[data])
 
 
@@ -63,8 +62,14 @@ const BookList = () => {
       updateQuery: (prev, { subscriptionData }) => {
         if(!subscriptionData.data) return prev
             const id = subscriptionData.data.autoRemoveBook.id
-            // const newListData = loGet(prev,["books"]).filter(book => book.id !== id )
-            // setListData(newListData)
+            if(loGet(prev, ["books"], []).some(
+              (book) => book.id === subscriptionData.data.autoRemoveBook.id
+            )){
+              const books =  loGet(prev, ["books"], []).filter(book => book.id !== subscriptionData.data.autoRemoveBook.id) 
+              return {
+                books: books,
+              };
+            }
       }
     })  
   })
