@@ -2,17 +2,46 @@ import React from "react";
 import ReactDOM from "react-dom";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { createBrowserHistory } from "history";
-import ApolloClient from "apollo-boost";
-import { ApolloProvider } from "react-apollo";
-import { hostServer } from "./configs/conection";
+import { ApolloProvider } from "@apollo/react-hooks";
+import { ApolloClient, InMemoryCache, HttpLink } from "apollo-boost";
+import { HOST_SERVER, SOCKET_SERVER } from "./configs/conection";
 import { GlobalStyle } from "./theme/global.styled";
 import StoreProvider from "./contexts/StoreContext";
+import { WebSocketLink } from "apollo-link-ws";
+import { getMainDefinition } from "apollo-utilities";
+import { split, from } from "apollo-link";
+
+const httpLink = new HttpLink({
+  uri: `http://localhost:9005/kompaql`,
+});
+
+const wsLink = new WebSocketLink({
+  uri: `ws://localhost:9005/kompaql`,
+  options: {
+    reconnect: true,
+  },
+});
+
+const cache = new InMemoryCache();
+
+const link = split(
+  ({ query }) => {
+    const { kind, operation } = getMainDefinition(query);
+    return kind === "OperationDefinition" && operation === "subscription";
+  },
+  wsLink,
+  httpLink
+);
 
 const client = new ApolloClient({
-  uri: `${hostServer}/kompaql`
+  link: from([link]),
+  cache,
+  connectToDevTools: true,
 });
+
+
 
 const history = createBrowserHistory();
 

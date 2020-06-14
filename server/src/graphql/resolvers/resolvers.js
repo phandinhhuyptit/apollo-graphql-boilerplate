@@ -11,25 +11,28 @@ import {
   getAuthors,
   updateAuthor
 } from "../../services/Author";
-import { LIST_BOOKS } from "../../utils/constant";
+import { LIST_BOOKS , NEW_BOOK ,REMOVE_BOOK } from "../../utils/constant";
 
 export default {
   Query: {
-    books: (_, args, { pubsub }) => getBooks({ ...args }, pubsub),
+    books: (_, args) => getBooks({ ...args }),
     book: (_, args) => getBook({ ...args }),
     authors: (_, args) => getAuthors({ ...args }),
     author: (_, args) => getAuthor({ ...args })
   },
   Mutation: {
-    addBook: (_, args) => addBook({ ...args }),
+    addBook: (_, args,{ pubsub }) => addBook({ ...args },pubsub),
     addAuthor: (_, args) => addAuthor({ ...args }),
     updateAuthor: (_, args) => updateAuthor({ ...args }),
     updateBook: (_, args) => updateBook({ ...args }),
-    deleteBook: (_, args) => deleteBook({ ...args })
+    deleteBook: (_, args,{ pubsub }) => deleteBook({ ...args },pubsub)
   },
   Subscription: {
-    listBooks: {
-      subscribe: (_, __, { pubsub }) => pubsub.asyncIterator(LIST_BOOKS)
+    autoAddBook: {
+      subscribe: (_, __, { pubsub }) => pubsub.asyncIterator(NEW_BOOK)
+    },
+    autoRemoveBook: {
+      subscribe: (_, __, { pubsub }) => pubsub.asyncIterator(REMOVE_BOOK)
     }
   }
 };

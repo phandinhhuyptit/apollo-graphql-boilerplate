@@ -7,10 +7,9 @@ import logger from "./utils/logger";
 import configs from "./configs/config";
 import typeDefs from "./graphql/schema/schema";
 import mongoose from "mongoose";
+import pubsub from './utils/pubsub'
 import resolvers from "./graphql/resolvers/resolvers";
-import { SubscriptionServer } from "subscriptions-transport-ws";
 import { ApolloServer, gql } from "apollo-server-express";
-import { PubSub } from "apollo-server";
 
 const PORT = parseInt(configs.PORT, 10) || 9005;
 const playground = (configs.APOLLO_PLAYGROUND === "true" && true) || false;
@@ -25,15 +24,16 @@ const path = configs.APOLLO_PATH || "/graphql";
 // Resolvers define the technique for fetching the types defined in the
 // schema. This resolver retrieves books from the "books" array above.
 
-const pubsub = new PubSub();
-
 const server = new ApolloServer({
   typeDefs,
   resolvers,
   introspection,
   playground,
   debug,
-  context: ({ req, res }) => ({ req, res, pubsub })
+  subscriptions: {
+    path
+   },
+  context: ({ req, res }) => ({ req, res, pubsub }),
 });
 
 let app = express();
@@ -41,17 +41,17 @@ let app = express();
 // Connect MongoDB
 mongoose.connect(configs.MONGO_URL, {
   useNewUrlParser: true,
-  useUnifiedTopology: true
+  useUnifiedTopology: true,
 });
 const db = mongoose.connection;
 db.on("open", () => {
   logger.info("DB connected");
 });
-db.on("error", err => logger.error(err));
+db.on("error", (err) => logger.error(err));
 
 // Security cors
 let corsOptions = {
-  origin: function(origin, callback) {
+  origin: function (origin, callback) {
     console.log("whitelist: ", whitelist);
     if (!origin) console.log("origin: ", origin);
     if (whitelist.indexOf(origin) !== -1) {
@@ -59,7 +59,7 @@ let corsOptions = {
     } else {
       callback(new Error("Not allowed access!"));
     }
-  }
+  },
 };
 
 if (corsEnabled !== "true") {
@@ -91,9 +91,9 @@ httpServer.listen(PORT, () => {
 });
 
 // keep server running
-process.on("uncaughtException", err =>
+process.on("uncaughtException", (err) =>
   logger.error("uncaughtException: " + err)
 );
-process.on("unhandledRejection", err =>
+process.on("unhandledRejection", (err) =>
   logger.error("unhandledRejection: " + err)
 );

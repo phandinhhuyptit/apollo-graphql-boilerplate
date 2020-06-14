@@ -1,9 +1,9 @@
 import Book from "../models/Book";
 import logger from "../utils/logger";
 import loGet from "lodash/get";
-import { LIST_BOOKS } from "../utils/constant";
+import { LIST_BOOKS, NEW_BOOK, REMOVE_BOOK  } from "../utils/constant";
 
-export const getBooks = async (args, pubsub) => {
+export const getBooks = async (args) => {
   const { title, genre, name, status } = args;
   const objQuery = {};
   const resultPromise = await Promise.all([
@@ -15,9 +15,9 @@ export const getBooks = async (args, pubsub) => {
 
   const books = resultPromise[0];
 
-  pubsub.publish(LIST_BOOKS, {
-    listBooks: books
-  });
+  // pubsub.publish(LIST_BOOKS, {
+  //   listBooks: books
+  // });
 
   const total = resultPromise[1] ? resultPromise[1].length : 0;
   return books;
@@ -29,16 +29,24 @@ export const getBook = async args => {
   return book;
 };
 
-export const addBook = async args => {
+export const addBook = async (args,pubsub) => {
   const bookObj = {
     title: loGet(args, ["title"]),
     name: loGet(args, ["name"]),
     genre: loGet(args, ["genre"]),
     author: loGet(args, ["authorId"])
   };
+  
   const book = new Book(bookObj);
-  await book.save();
-  return book;
+  await book.save(); 
+  const newBook = await Book.findById(book._id).populate("author") 
+  const Test = newBook.toJSON()
+  Object.assign(Test,{id : book._id})
+  await pubsub.publish(NEW_BOOK,{
+  autoAddBook : Test,
+  })  
+  return book
+
 };
 
 export const updateBook = async args => {
@@ -52,12 +60,19 @@ export const updateBook = async args => {
   return book;
 };
 
-export const deleteBook = async args => {
+export const deleteBook = async (args,pubsub) => {
   const { bookId } = args;
   const checkIdExist = await Book.findById(bookId).exec();
   if (!checkIdExist) throw new ServerError("book is not exist in system", 400);
   await checkIdExist.remove();
+  await pubsub.publish(REMOVE_BOOK,{
+    autoRemoveBook : {
+      id: bookId,
+      message: "Success"
+    }
+  })
   return {
+    id: bookId,
     message: "Success"
   };
 };

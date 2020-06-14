@@ -86,7 +86,6 @@ const NewBookForm = () => {
                 toast.success("Success!", {
                   position: toast.POSITION.TOP_RIGHT
                 });
-                console.log(result);
                 resetForm();
                 setSubmitting(false);
               } catch (error) {
