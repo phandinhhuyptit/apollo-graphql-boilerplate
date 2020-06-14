@@ -19,7 +19,7 @@ const BookDetails = forwardRef(({ book, handleDeleteBook }, ref) => {
       >
         {book.title}
       </div>
-      <div className="author">{loGet(book, ["author", "name"])} </div>
+      <div className="author">{loGet(book, ["author", "name"],"")} </div>
     </li>
   );
 });
